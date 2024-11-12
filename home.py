@@ -10,7 +10,136 @@ import os, uuid
 load_dotenv()
 
 st.set_page_config(page_title="DocumentGPT", page_icon=":💬:", layout="wide")
-st.header("DocumentGPT 📚💬")
+st.header("📚 DocumentGPT 💬")
+# Custom CSS
+st.markdown("""
+    <style>
+        /* Main container styling */
+        .main {
+            padding: 2rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+        }
+        
+        /* Header styling */
+        .stHeader {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        /* Custom header with icon */
+        .custom-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+        
+        /* Sidebar styling */
+        .css-1d391kg {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* File uploader styling */
+        .stFileUploader {
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stFileUploader:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        
+        /* Button styling */
+        .stButton > button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .stButton > button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        /* Success message styling */
+        .success-message {
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+            margin: 1rem 0;
+        }
+        
+        /* Error message styling */
+        .error-message {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+            margin: 1rem 0;
+        }
+        
+        /* Info message styling */
+        .info-message {
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            margin: 1rem 0;
+        }
+        
+        /* Chat container styling */
+        .chat-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        
+        /* Chat message styling */
+        .chat-message {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            background-color: #e9ecef;
+            margin-left: auto;
+        }
+        
+        .bot-message {
+            background-color: #f8f9fa;
+            margin-right: auto;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
 
 # Initialize URL and API Key for Qdrant
 url = os.getenv("QDRANT_URL")
@@ -47,12 +176,14 @@ def get_txt_text(file_path, file_name):
 
 # Sidebar to upload files
 with st.sidebar:
+    st.markdown('<div class="sidebar-container">', unsafe_allow_html=True)
     uploaded_files = st.file_uploader("Upload your file", type=['pdf'], accept_multiple_files=True)
     if st.button("Process"):
         Documents = []
         
         if uploaded_files:
-            st.write("Files Loaded Splitting...")
+            st.markdown('<div class="info-message">Files Loaded. Splitting...</div>', unsafe_allow_html=True)
+
             for uploaded_file in uploaded_files:
                 try:
                     os.makedirs('data', exist_ok=True)
@@ -83,6 +214,7 @@ with st.sidebar:
             # Clear chat history when new file is uploaded
             if "langchain_messages" in st.session_state:
                 st.session_state["langchain_messages"] = []
+                st.markdown('<div class="info-message">Indexing Please Wait...</div>', unsafe_allow_html=True)
             
             st.write("Indexing Please Wait...")
             
@@ -92,16 +224,24 @@ with st.sidebar:
                 
                 # Insert documents using the QdrantHandler
                 qdrant = qdrant_handler.insertion(Documents, embeddings, collection_name)
+                st.markdown('<div class="success-message">Indexing Done!</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="success-message">Documents from {uploaded_file.name} added to collection \'{collection_name}\'</div>', unsafe_allow_html=True)
                 
                 st.write("Indexing Done")
                 st.success(f"Documents from {uploaded_file.name} added to collection '{collection_name}'")
                 st.session_state["processtrue"] = True
                 
             except Exception as e:
-                st.error(f"Error indexing: {e}")
+                st.markdown(f'<div class="error-message">Error indexing: {e}</div>', unsafe_allow_html=True)
+                
 
 if "processtrue" in st.session_state:
     from chat import main
     main()
+    st.markdown('</div>', unsafe_allow_html=True)
 else:
-    st.info("Please Upload Your Files.")
+    st.markdown('<div class="info-message">Please Upload Your Files.</div>', unsafe_allow_html=True)
+
+
+
+
