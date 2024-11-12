@@ -15,6 +15,9 @@ from langchain_core.runnables import (
 )
 from qdrant_class import QdrantInsertRetrievalAll
 import streamlit as st
+import os
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # First, define the template constants
 _template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
@@ -44,8 +47,9 @@ ANSWER_PROMPT = ChatPromptTemplate.from_messages([
 
 def get_vectorstore():
     """Create a new vectorstore instance using the current collection name"""
-    url = "https://10276c42-0edc-4c2e-8397-47984d8e2bc3.europe-west3-0.gcp.cloud.qdrant.io:6333"
-    api_key = "9RYe_vjGSuKvkpDGBw23nlRJe9lq9jub5bJmPrFxE1RPhfNgnT707Q"
+    # Initialize URL and API Key for Qdrant
+    url = os.getenv("QDRANT_URL")
+    api_key = os.getenv("QDRANT_API_KEY")
     
     embeddings = HuggingFaceEmbeddings(model_name="distiluse-base-multilingual-cased-v1")
     
@@ -94,7 +98,7 @@ def create_chain():
                 chat_history=lambda x: _format_chat_history(x["chat_history"])
             )
             | CONDENSE_QUESTION_PROMPT
-            | GoogleGenerativeAI(model="gemini-1.5-flash",temperature=0,api_key="AIzaSyBsNFkNa4T4ljaRin1KKz3XGXeljfUCHzg") 
+            | GoogleGenerativeAI(model="gemini-1.5-flash",temperature=0,api_key=GOOGLE_API_KEY) 
             | StrOutputParser(),
         ),
         RunnableLambda(itemgetter("question"))
@@ -108,5 +112,5 @@ def create_chain():
 
     return _inputs | ANSWER_PROMPT | GoogleGenerativeAI(
         model="gemini-1.5-pro",
-        api_key="AIzaSyBsNFkNa4T4ljaRin1KKz3XGXeljfUCHzg"
+        api_key=GOOGLE_API_KEY
     ) | StrOutputParser()
