@@ -9,6 +9,5 @@ langchain-core
 sentence-transformers
 python-dotenv
 pymupdf
-pinecone-notebooks
 langchain-qdrant
 
