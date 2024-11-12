@@ -14,8 +14,8 @@ st.set_page_config(page_title="DocumentGPT", page_icon=":💬:", layout="wide")
 st.header("DocumentGPT 📚💬")
 
 # Initialize URL and API Key for Qdrant
-url = os.getenv("QDRANT_URL", "https://10276c42-0edc-4c2e-8397-47984d8e2bc3.europe-west3-0.gcp.cloud.qdrant.io:6333")
-api_key = os.getenv("QDRANT_API_KEY", "9RYe_vjGSuKvkpDGBw23nlRJe9lq9jub5bJmPrFxE1RPhfNgnT707Q")
+url = os.getenv("QDRANT_URL")
+api_key = os.getenv("QDRANT_API_KEY")
 
 # Initialize Qdrant handler
 qdrant_handler = QdrantInsertRetrievalAll(api_key=api_key, url=url)
