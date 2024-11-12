@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_chat import message
 from langchain_community.document_loaders import PyMuPDFLoader, TextLoader
 from langchain.docstore.document import Document
 from langchain.embeddings import HuggingFaceEmbeddings
