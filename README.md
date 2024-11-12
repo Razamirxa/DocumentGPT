@@ -36,7 +36,7 @@ DocumentGPT is a Streamlit-based application designed to help users upload and a
 
 4. Run the app:
     ```bash
-    streamlit run app.py
+    streamlit run home.py
     ```
 
 ## Usage
