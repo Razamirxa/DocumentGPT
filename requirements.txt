@@ -2,7 +2,13 @@ streamlit
 langchain-community
 langchain-google-genai
 langchain-huggingface
-langchain-core
 qdrant-client
-dotenv
 uuid
+langchain
+langchain-core
+sentence-transformers
+python-dotenv
+pymupdf
+pinecone-notebooks
+langchain-google-genai
+langchain-huggingface
