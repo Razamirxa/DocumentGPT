@@ -18,7 +18,7 @@ DocumentGPT is a Streamlit-based application designed to help users upload and a
 ### Steps
 1. Clone this repository:
     ```bash
-    git clone https://github.com/yourusername/documentgpt.git
+    https://github.com/Razamirxa/DocumentGPT.git
     cd documentgpt
     ```
 
