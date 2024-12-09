@@ -27,17 +27,24 @@ Follow Up Input: {question}
 Standalone question:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_template)
 
-template = """Answer the question based only on the following context and maintain friendly tone. 
-Include the source information at the end of your response in a new line starting with "Sources:".
-For each source, include the document name and page/section number.
+template = """If the input is a greeting like "hi", "hello", or "hey":
+    Greet the user warmly and ask how you can assist them.
 
+If the input is unrelated to the provided context:
+    Respond with "I'm sorry, I don't have enough information to answer that question based on the given context."
+
+Otherwise:
+    Answer the question based only on the following context and maintain a friendly tone.
+    
 <context>
 {context}
 </context>
-
 Question: {question}
 
-Remember to be detailed yet concise in your response and cite your sources at the end."""
+Answer: {answer}
+
+Sources: For each source, include the document name and page/section number.
+"""
 
 ANSWER_PROMPT = ChatPromptTemplate.from_messages([
     ("system", template),
