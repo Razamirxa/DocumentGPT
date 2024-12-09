@@ -27,7 +27,7 @@ Follow Up Input: {question}
 Standalone question:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_template)
 
-template = """If the input is a greeting like "hi", "hello", or "hey":
+_template = """If the input is a greeting like "hi", "hello", or "hey":
     Greet the user warmly and ask how you can assist them.
 
 If the input is unrelated to the provided context:
@@ -39,9 +39,8 @@ Otherwise:
 <context>
 {context}
 </context>
-Question: {question}
 
-Answer: {answer}
+Question: {question}
 
 Sources: For each source, include the document name and page/section number.
 """
